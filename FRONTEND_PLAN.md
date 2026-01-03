@@ -1,0 +1,42 @@
+# Plan frontend (Django Templates + Bootstrap)
+
+Ce fichier est temporaire pour suivre l’avancement. Coche chaque étape au fur et à mesure.
+
+## Phase 0 — Structure / setup
+- [ ] Vérifier l’install locale : `pip install -r requirements.txt`
+- [ ] Config `.env` (copie de `.env.example`) avec `AUTH_API_BASE_URL`, `PREDICTION_API_BASE_URL`, `API_VERSION`, `SECRET_KEY`.
+- [ ] `python manage.py migrate`
+- [ ] Run local : `python manage.py runserver 0.0.0.0:8002`
+- [ ] Décider du schéma de couleurs/typo (à intégrer dans `base.html`).
+
+## Phase 1 — Auth côté frontend
+- [ ] Stocker le token en session (flow login/register → auth service → sauvegarde access/refresh).
+- [ ] Ajouter logout (invalidation locale + appel /logout si exposé).
+- [ ] Gérer refresh token (background ou bouton).
+- [ ] État connecté/déconnecté dans la navbar (profil, rôle, email).
+- [ ] Gestion des erreurs auth (bad creds, email non vérifié, verrouillage).
+
+## Phase 2 — Consommation API prediction
+- [ ] Dashboard : lister `/api/v{version}/predictions/` avec pagination/filtre si dispo.
+- [ ] Détail : appeler l’endpoint de détail (id) et afficher les champs clés.
+- [ ] Créer une prédiction (si endpoint POST) avec validation et messages.
+- [ ] Gérer les codes 403/401 (redirection login + message rôle requis).
+- [ ] Brancher les rôles (HR/Manager/Auditor/etc.) dans l’UI (affichage conditionnel actions).
+
+## Phase 3 — UX / thème
+- [ ] Intégrer la palette (couleurs, typo) fournie.
+- [ ] Nettoyer les formulaires (labels, aide, états de chargement/erreur).
+- [ ] Layout responsive (mobile first) et navigation claire.
+- [ ] Ajout de composants utiles : badges rôles, statuts, toasts.
+
+## Phase 4 — QA / validation
+- [ ] Vérifier le flux complet : register → login → dashboard → détail → logout.
+- [ ] Tests manuels avec rôles (HR, Manager, Auditor, Support) sur les pages protégées.
+- [ ] Vérifier l’affichage des erreurs API (403/401/422/500).
+- [ ] Lint basique : `python -m compileall .` (ou check templates).
+
+## Phase 5 — Livraison
+- [ ] Mettre à jour `frontend/README.md` (env, commandes, URLs).
+- [ ] Vérifier `.env.example` couvre les variables nécessaires.
+- [ ] `git subtree push --prefix=frontend frontrepo main`
+- [ ] (Option) Ajouter CI simple pour runserver check / compileall.
