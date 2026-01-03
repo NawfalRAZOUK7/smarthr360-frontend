@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h4 class="mb-0">Prédictions</h4>
+    <small class="text-muted">Source API : {{ prediction_base }}</small>
+  </div>
+  <a class="btn btn-outline-primary btn-sm" href="?token={{ request.GET.token }}">Rafraîchir</a>
+</div>
+
+{% if error %}
+  <div class="alert alert-warning">{{ error }}</div>
+{% endif %}
+
+{% if predictions %}
+  <div class="row row-cols-1 row-cols-md-2 g-3">
+    {% for item in predictions %}
+      <div class="col">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h6 class="card-title">Prédiction {{ item.id|default:"-" }}</h6>
+            <p class="card-text text-muted small mb-2">
+              Score: {{ item.score|default:"n/a" }}<br>
+              Type: {{ item.type|default:"n/a" }}
+            </p>
+            <a class="btn btn-sm btn-primary" href="{% url 'ui:prediction_detail' item.id %}">Détails</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">Aucune prédiction disponible.</div>
+{% endif %}
+{% endblock %}
