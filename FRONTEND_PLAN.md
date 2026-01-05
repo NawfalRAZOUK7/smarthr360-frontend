@@ -33,7 +33,7 @@ Ce fichier est temporaire pour suivre l’avancement. Coche chaque étape au fur
 - [ ] Vérifier le flux complet : register → login → dashboard → détail → logout.
 - [ ] Tests manuels avec rôles (HR, Manager, Auditor, Support) sur les pages protégées.
 - [ ] Vérifier l’affichage des erreurs API (403/401/422/500).
-- [ ] Lint basique : `python -m compileall .` (ou check templates).
+- [x] Lint basique : `python -m compileall .` (ou check templates).
 
 ## Phase 5 — Livraison
 - [ ] Mettre à jour `frontend/README.md` (env, commandes, URLs).
