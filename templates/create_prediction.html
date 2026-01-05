@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Créer une prédiction{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-2">Créer une prédiction</h5>
+        <p class="text-muted small mb-3">
+          Soumettez un JSON conforme à l’API prediction_skills. Rôles autorisés : HR / Manager / Auditor.
+        </p>
+        {% if not user_role %}
+          <div class="alert alert-info">Connectez-vous pour soumettre.</div>
+        {% elif not role_allowed %}
+          <div class="alert alert-warning">Votre rôle ({{ user_role }}) n’est pas autorisé pour créer des prédictions.</div>
+        {% endif %}
+        {% if message %}
+          <div class="alert alert-success">{{ message }}</div>
+        {% endif %}
+        {% if error %}
+          <div class="alert alert-warning">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Payload JSON</label>
+            <textarea class="form-control" name="payload" rows="10">{{ payload }}</textarea>
+            <div class="form-text">Adaptez la structure au contrat de l’API.</div>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary" {% if not user_role %}disabled{% endif %}>Soumettre</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

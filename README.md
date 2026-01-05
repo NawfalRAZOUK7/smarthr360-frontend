@@ -28,6 +28,7 @@ python manage.py runserver 0.0.0.0:8002
 - `/logout` : purge la session locale
 - `/refresh` : rafraîchit l’access token avec le refresh en session
 - `/predictions/<id>` : page de détail (appelle l’API prediction)
+- `/predictions/new` : formulaire JSON pour créer une prédiction (rôles HR/Manager/Auditor)
 - `/profile` : affiche email/rôle si connecté
 
 ## TODO prochain

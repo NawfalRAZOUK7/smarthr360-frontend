@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Any, Dict
 
@@ -9,6 +10,7 @@ from django.urls import reverse
 AUTH_API_BASE_URL = os.environ.get("AUTH_API_BASE_URL", "http://localhost:8000")
 PREDICTION_API_BASE_URL = os.environ.get("PREDICTION_API_BASE_URL", "http://localhost:8001")
 API_VERSION = os.environ.get("API_VERSION", "2")
+ALLOWED_ROLES = {"HR", "MANAGER", "AUDITOR"}
 
 
 def _extract_error(resp: requests.Response) -> str:
@@ -56,7 +58,7 @@ def _fetch_predictions(access_token: str) -> Dict[str, Any]:
         if resp.status_code == 200:
             return resp.json()
         if resp.status_code in (401, 403):
-            return {"results": [], "error": "Accès refusé. Connectez-vous avec un rôle autorisé."}
+            return {"results": [], "error": "Accès refusé. Connectez-vous avec un rôle autorisé (HR/Manager/Auditor)."}
         return {"results": [], "error": f"API returned {resp.status_code}: {resp.text}"}
     except requests.RequestException as exc:
         return {"results": [], "error": str(exc)}
@@ -78,7 +80,7 @@ def _fetch_prediction_detail(access_token: str, prediction_id: str) -> Dict[str,
         if resp.status_code == 200:
             return resp.json()
         if resp.status_code in (401, 403):
-            return {"error": "Accès refusé. Connectez-vous avec un rôle autorisé."}
+            return {"error": "Accès refusé. Connectez-vous avec un rôle autorisé (HR/Manager/Auditor)."}
         return {"error": f"API returned {resp.status_code}: {resp.text}"}
     except requests.RequestException as exc:
         return {"error": str(exc)}
@@ -228,4 +230,55 @@ def refresh_view(request: HttpRequest) -> HttpResponse:
         "login.html",
         {"auth_base": AUTH_API_BASE_URL, "error": error},
         status=401,
+    )
+
+
+def create_prediction_view(request: HttpRequest) -> HttpResponse:
+    access_token = request.session.get("access_token")
+    user_role = request.session.get("user_role")
+    role_allowed = user_role in ALLOWED_ROLES if user_role else False
+    message = None
+    error = None
+    payload_text = request.POST.get("payload", '{\n  "example": "value"\n}')
+
+    if request.method == "POST":
+        if not access_token:
+            return redirect(f"{reverse('ui:login')}?next={request.path}")
+        try:
+            payload = json.loads(payload_text)
+        except json.JSONDecodeError:
+            payload = None
+            error = "Payload JSON invalide."
+
+        if payload is not None:
+            try:
+                resp = requests.post(
+                    f"{PREDICTION_API_BASE_URL}/api/v{API_VERSION}/predictions/",
+                    headers={
+                        "Authorization": f"Bearer {access_token}",
+                        "Accept": f"application/json; version={API_VERSION}",
+                    },
+                    json=payload,
+                    timeout=10,
+                )
+                if resp.status_code in (200, 201):
+                    message = "Prédiction créée avec succès."
+                    payload_text = json.dumps(resp.json(), indent=2)
+                elif resp.status_code in (401, 403):
+                    error = "Accès refusé. Rôle requis (HR/Manager/Auditor)."
+                else:
+                    error = _extract_error(resp)
+            except requests.RequestException as exc:
+                error = str(exc)
+
+    return render(
+        request,
+        "create_prediction.html",
+        {
+            "payload": payload_text,
+            "message": message,
+            "error": error,
+            "role_allowed": role_allowed,
+            "user_role": user_role,
+        },
     )

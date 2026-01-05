@@ -9,7 +9,12 @@
       <span class="badge-role ms-2">{{ user_role }}</span>
     {% endif %}
   </div>
-  <a class="btn btn-outline-primary btn-sm" href="?token={{ request.GET.token }}">Rafraîchir</a>
+  <div class="d-flex gap-2">
+    {% if user_role in "HR MANAGER AUDITOR" %}
+      <a class="btn btn-primary btn-sm" href="{% url 'ui:prediction_create' %}">Créer</a>
+    {% endif %}
+    <a class="btn btn-outline-primary btn-sm" href="?token={{ request.GET.token }}">Rafraîchir</a>
+  </div>
 </div>
 
 {% if not user_email and not request.GET.token %}
