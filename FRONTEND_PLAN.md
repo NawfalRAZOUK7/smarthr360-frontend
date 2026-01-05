@@ -3,11 +3,11 @@
 Ce fichier est temporaire pour suivre l’avancement. Coche chaque étape au fur et à mesure.
 
 ## Phase 0 — Structure / setup
-- [ ] Vérifier l’install locale : `pip install -r requirements.txt`
-- [ ] Config `.env` (copie de `.env.example`) avec `AUTH_API_BASE_URL`, `PREDICTION_API_BASE_URL`, `API_VERSION`, `SECRET_KEY`.
-- [ ] `python manage.py migrate`
-- [ ] Run local : `python manage.py runserver 0.0.0.0:8002`
-- [ ] Décider du schéma de couleurs/typo (à intégrer dans `base.html`).
+- [x] Vérifier l’install locale : `pip install -r requirements.txt`
+- [x] Config `.env` (copie de `.env.example`) avec `AUTH_API_BASE_URL`, `PREDICTION_API_BASE_URL`, `API_VERSION`, `SECRET_KEY`.
+- [x] `python manage.py migrate`
+- [x] Run local : `python manage.py runserver 0.0.0.0:8002`
+- [x] Décider du schéma de couleurs/typo (à intégrer dans `base.html`).
 
 ## Phase 1 — Auth côté frontend
 - [ ] Stocker le token en session (flow login/register → auth service → sauvegarde access/refresh).
