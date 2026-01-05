@@ -4,7 +4,14 @@
 <div class="card shadow-sm">
   <div class="card-body">
     <h5 class="card-title">Profil utilisateur</h5>
-    <p class="text-muted small">À compléter : info utilisateur, rôle, email, actions (logout, refresh token).</p>
+    {% if user_email %}
+      <p class="mb-1"><strong>Email :</strong> {{ user_email }}</p>
+      <p class="mb-3"><strong>Rôle :</strong> {{ user_role|default:"-" }}</p>
+      <a class="btn btn-outline-primary btn-sm" href="{% url 'ui:logout' %}">Déconnexion</a>
+    {% else %}
+      <p class="text-muted">Vous n'êtes pas connecté.</p>
+      <a class="btn btn-primary btn-sm" href="{% url 'ui:login' %}">Se connecter</a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

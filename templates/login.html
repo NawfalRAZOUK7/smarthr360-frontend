@@ -6,8 +6,12 @@
     <div class="card shadow-sm">
       <div class="card-body">
         <h5 class="card-title mb-3">Connexion</h5>
-        <p class="text-muted small">Cette page envoie les identifiants au service auth ({{ auth_base }}).</p>
-        <form method="post" action="{{ auth_base }}/api/auth/login/">
+        {% if error %}
+          <div class="alert alert-warning">{{ error }}</div>
+        {% endif %}
+        <p class="text-muted small">Identifiez-vous pour accéder aux prédictions.</p>
+        <form method="post" action="">
+          {% csrf_token %}
           <div class="mb-3">
             <label class="form-label">Email</label>
             <input type="email" name="email" class="form-control" required>

@@ -23,10 +23,12 @@ python manage.py runserver 0.0.0.0:8002
 - `API_VERSION` (ex: 2)
 
 ## Pages
-- `/` : Dashboard des prédictions (utilise le token `?token=...` provisoire)
-- `/login` et `/register` : formulaires HTML qui postent vers le backend `auth`
+- `/` : Dashboard des prédictions (utilise le token en session si connecté, sinon `?token=...` reste possible en debug)
+- `/login` et `/register` : formulaires HTML qui appellent le backend `auth` et stockent access/refresh en session
+- `/logout` : purge la session locale
+- `/refresh` : rafraîchit l’access token avec le refresh en session
 - `/predictions/<id>` : page de détail (à brancher)
-- `/profile` : placeholder profil/session
+- `/profile` : affiche email/rôle si connecté
 
 ## TODO prochain
 - Stocker le token en session et intégrer le login/logout complet (appel API auth)

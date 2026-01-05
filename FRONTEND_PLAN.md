@@ -10,11 +10,11 @@ Ce fichier est temporaire pour suivre l’avancement. Coche chaque étape au fur
 - [x] Décider du schéma de couleurs/typo (à intégrer dans `base.html`).
 
 ## Phase 1 — Auth côté frontend
-- [ ] Stocker le token en session (flow login/register → auth service → sauvegarde access/refresh).
-- [ ] Ajouter logout (invalidation locale + appel /logout si exposé).
-- [ ] Gérer refresh token (background ou bouton).
-- [ ] État connecté/déconnecté dans la navbar (profil, rôle, email).
-- [ ] Gestion des erreurs auth (bad creds, email non vérifié, verrouillage).
+- [x] Stocker le token en session (flow login/register → auth service → sauvegarde access/refresh).
+- [x] Ajouter logout (invalidation locale + appel /logout si exposé).
+- [x] Gérer refresh token (background ou bouton).
+- [x] État connecté/déconnecté dans la navbar (profil, rôle, email).
+- [x] Gestion des erreurs auth (bad creds, email non vérifié, verrouillage basique).
 
 ## Phase 2 — Consommation API prediction
 - [ ] Dashboard : lister `/api/v{version}/predictions/` avec pagination/filtre si dispo.

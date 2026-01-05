@@ -50,9 +50,19 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
     <div class="container">
       <a class="navbar-brand" href="{% url 'ui:dashboard' %}">SmartHR360</a>
-      <div class="d-flex gap-2">
-        <a class="btn btn-outline-secondary btn-sm" href="{% url 'ui:profile' %}">Profil</a>
-        <a class="btn btn-primary btn-sm" href="{% url 'ui:login' %}">Connexion</a>
+      <div class="d-flex align-items-center gap-2">
+        {% if user_email %}
+          <span class="badge-role">{{ user_role|default:"-" }}</span>
+          <span class="text-white small">{{ user_email }}</span>
+          <form method="post" action="{% url 'ui:refresh' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light btn-sm">Refresh token</button>
+          </form>
+          <a class="btn btn-outline-light btn-sm" href="{% url 'ui:logout' %}">Déconnexion</a>
+        {% else %}
+          <a class="btn btn-outline-light btn-sm" href="{% url 'ui:login' %}">Connexion</a>
+          <a class="btn btn-primary btn-sm" href="{% url 'ui:register' %}">Inscription</a>
+        {% endif %}
       </div>
     </div>
   </nav>

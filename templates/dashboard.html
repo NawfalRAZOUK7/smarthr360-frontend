@@ -5,6 +5,9 @@
   <div>
     <h4 class="mb-0">Prédictions</h4>
     <small class="text-muted">Source API : {{ prediction_base }}</small>
+    {% if user_role %}
+      <span class="badge-role ms-2">{{ user_role }}</span>
+    {% endif %}
   </div>
   <a class="btn btn-outline-primary btn-sm" href="?token={{ request.GET.token }}">Rafraîchir</a>
 </div>
