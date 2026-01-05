@@ -24,10 +24,10 @@ Ce fichier est temporaire pour suivre l’avancement. Coche chaque étape au fur
 - [x] Brancher les rôles (HR/Manager/Auditor/etc.) dans l’UI (affichage conditionnel actions).
 
 ## Phase 3 — UX / thème
-- [ ] Intégrer la palette (couleurs, typo) fournie.
-- [ ] Nettoyer les formulaires (labels, aide, états de chargement/erreur).
-- [ ] Layout responsive (mobile first) et navigation claire.
-- [ ] Ajout de composants utiles : badges rôles, statuts, toasts.
+- [x] Intégrer la palette (couleurs, typo) fournie.
+- [x] Nettoyer les formulaires (labels, aide, états de chargement/erreur).
+- [x] Layout responsive (mobile first) et navigation claire.
+- [x] Ajout de composants utiles : badges rôles, statuts.
 
 ## Phase 4 — QA / validation
 - [ ] Vérifier le flux complet : register → login → dashboard → détail → logout.

@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Inscription{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-6">
-    <div class="card shadow-sm">
+<div class="auth-hero">
+  <div class="col-md-6 col-lg-5">
+    <div class="card">
       <div class="card-body">
-        <h5 class="card-title mb-3">Créer un compte</h5>
+        <h5 class="card-title mb-3 text-center">Créer un compte</h5>
         {% if error %}
           <div class="alert alert-warning">{{ error }}</div>
         {% endif %}
-        <p class="text-muted small">Les champs requis seront validés par le service auth.</p>
+        <p class="text-muted small text-center mb-4">Les champs requis seront validés par le service auth.</p>
         <form method="post" action="">
           {% csrf_token %}
           <div class="row">

@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Connexion{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-6">
-    <div class="card shadow-sm">
+<div class="auth-hero">
+  <div class="col-md-5 col-lg-4">
+    <div class="card">
       <div class="card-body">
-        <h5 class="card-title mb-3">Connexion</h5>
+        <h5 class="card-title mb-3 text-center">Connexion</h5>
         {% if error %}
           <div class="alert alert-warning">{{ error }}</div>
         {% endif %}
-        <p class="text-muted small">Identifiez-vous pour accéder aux prédictions.</p>
+        <p class="text-muted small text-center mb-4">Identifiez-vous pour accéder aux prédictions.</p>
         <form method="post" action="">
           {% csrf_token %}
           <div class="mb-3">
