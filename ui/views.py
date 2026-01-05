@@ -55,9 +55,33 @@ def _fetch_predictions(access_token: str) -> Dict[str, Any]:
         )
         if resp.status_code == 200:
             return resp.json()
+        if resp.status_code in (401, 403):
+            return {"results": [], "error": "Accès refusé. Connectez-vous avec un rôle autorisé."}
         return {"results": [], "error": f"API returned {resp.status_code}: {resp.text}"}
     except requests.RequestException as exc:
         return {"results": [], "error": str(exc)}
+
+
+def _fetch_prediction_detail(access_token: str, prediction_id: str) -> Dict[str, Any]:
+    if not access_token:
+        return {"error": "Missing access token"}
+    url = f"{PREDICTION_API_BASE_URL}/api/v{API_VERSION}/predictions/{prediction_id}/"
+    try:
+        resp = requests.get(
+            url,
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": f"application/json; version={API_VERSION}",
+            },
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            return resp.json()
+        if resp.status_code in (401, 403):
+            return {"error": "Accès refusé. Connectez-vous avec un rôle autorisé."}
+        return {"error": f"API returned {resp.status_code}: {resp.text}"}
+    except requests.RequestException as exc:
+        return {"error": str(exc)}
 
 
 def dashboard(request: HttpRequest) -> HttpResponse:
@@ -150,12 +174,18 @@ def register_view(request: HttpRequest) -> HttpResponse:
 
 
 def prediction_detail(request: HttpRequest, prediction_id: str) -> HttpResponse:
-    # Stub detail page; integrate API call later.
+    access_token = request.session.get("access_token")
+    detail = _fetch_prediction_detail(access_token, prediction_id)
+    error = detail.get("error")
+    if error and "Accès refusé" in error:
+        return redirect(f"{reverse('ui:login')}?next={request.path}")
     return render(
         request,
         "prediction_detail.html",
         {
             "prediction_id": prediction_id,
+            "detail": detail if not error else None,
+            "error": error,
         },
     )
 

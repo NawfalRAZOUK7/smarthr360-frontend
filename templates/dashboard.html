@@ -12,6 +12,10 @@
   <a class="btn btn-outline-primary btn-sm" href="?token={{ request.GET.token }}">Rafraîchir</a>
 </div>
 
+{% if not user_email and not request.GET.token %}
+  <div class="alert alert-info">Connectez-vous pour voir vos prédictions, ou passez un token en debug via <code>?token=...</code>.</div>
+{% endif %}
+
 {% if error %}
   <div class="alert alert-warning">{{ error }}</div>
 {% endif %}

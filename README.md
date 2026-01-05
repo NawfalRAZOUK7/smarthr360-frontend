@@ -27,7 +27,7 @@ python manage.py runserver 0.0.0.0:8002
 - `/login` et `/register` : formulaires HTML qui appellent le backend `auth` et stockent access/refresh en session
 - `/logout` : purge la session locale
 - `/refresh` : rafraîchit l’access token avec le refresh en session
-- `/predictions/<id>` : page de détail (à brancher)
+- `/predictions/<id>` : page de détail (appelle l’API prediction)
 - `/profile` : affiche email/rôle si connecté
 
 ## TODO prochain

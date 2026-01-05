@@ -17,8 +17,8 @@ Ce fichier est temporaire pour suivre l’avancement. Coche chaque étape au fur
 - [x] Gestion des erreurs auth (bad creds, email non vérifié, verrouillage basique).
 
 ## Phase 2 — Consommation API prediction
-- [ ] Dashboard : lister `/api/v{version}/predictions/` avec pagination/filtre si dispo.
-- [ ] Détail : appeler l’endpoint de détail (id) et afficher les champs clés.
+- [x] Dashboard : lister `/api/v{version}/predictions/` avec pagination/filtre si dispo.
+- [x] Détail : appeler l’endpoint de détail (id) et afficher les champs clés.
 - [ ] Créer une prédiction (si endpoint POST) avec validation et messages.
 - [ ] Gérer les codes 403/401 (redirection login + message rôle requis).
 - [ ] Brancher les rôles (HR/Manager/Auditor/etc.) dans l’UI (affichage conditionnel actions).
