@@ -152,7 +152,7 @@ def register_view(request: HttpRequest) -> HttpResponse:
                 json=payload,
                 timeout=10,
             )
-            if resp.status_code == 200:
+            if resp.status_code in (200, 201):
                 data = resp.json().get("data", {})
                 _store_session_tokens(request, data)
                 return redirect(reverse("ui:dashboard"))
