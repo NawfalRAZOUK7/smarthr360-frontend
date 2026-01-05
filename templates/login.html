@@ -7,7 +7,15 @@
       <div class="card-body">
         <h5 class="card-title mb-3 text-center">Connexion</h5>
         {% if error %}
-          <div class="alert alert-warning">{{ error }}</div>
+          <div class="alert alert-warning">
+            {{ error }}
+            {% if error_detail %}
+              <details class="mt-2">
+                <summary class="small text-muted">Détail technique</summary>
+                <div class="small text-muted">{{ error_detail }}</div>
+              </details>
+            {% endif %}
+          </div>
         {% endif %}
         <p class="text-muted small text-center mb-4">Identifiez-vous pour accéder aux prédictions.</p>
         <form method="post" action="">

@@ -13,22 +13,33 @@ API_VERSION = os.environ.get("API_VERSION", "2")
 ALLOWED_ROLES = {"HR", "MANAGER", "AUDITOR"}
 
 
-def _extract_error(resp: requests.Response) -> str:
+def _extract_error(resp: requests.Response) -> Dict[str, str]:
+    """Return friendly + technical error messages without dumping raw payloads."""
+    friendly = f"Erreur {resp.status_code}"
+    technical = ""
     try:
         data = resp.json()
-        # Try common shapes: {"meta": {"message": ...}} or {"detail": ...} or {"errors": ...}
         meta_msg = data.get("meta", {}).get("message")
         detail = data.get("detail")
         errors = data.get("errors")
-        if meta_msg:
-            return f"{resp.status_code}: {meta_msg}"
-        if detail:
-            return f"{resp.status_code}: {detail}"
-        if errors:
-            return f"{resp.status_code}: {errors}"
+        technical = meta_msg or detail or (errors if isinstance(errors, str) else str(errors))
+
+        text_all = f"{meta_msg} {detail} {errors}".lower() if any([meta_msg, detail, errors]) else ""
+        if "password" in text_all and ("too short" in text_all or "min" in text_all):
+            friendly = "Le mot de passe ne respecte pas la longueur minimale."
+        elif "email" in text_all and ("already" in text_all or "existe" in text_all):
+            friendly = "Cet email est déjà utilisé."
+        elif "username" in text_all and ("already" in text_all or "existe" in text_all):
+            friendly = "Ce nom d'utilisateur est déjà utilisé."
+        elif "not verified" in text_all or "non vérifié" in text_all:
+            friendly = "Email non vérifié."
+        elif "locked" in text_all or "lock" in text_all or "axes" in text_all:
+            friendly = "Compte verrouillé. Réessayez plus tard ou contactez un admin."
+        elif meta_msg or detail:
+            friendly = meta_msg or detail
     except Exception:
-        pass
-    return f"Erreur {resp.status_code}: {resp.text}"
+        technical = resp.text
+    return {"friendly": friendly, "technical": technical or resp.text}
 
 
 def _store_session_tokens(request: HttpRequest, data: Dict[str, Any]) -> None:
@@ -118,13 +129,16 @@ def login_view(request: HttpRequest) -> HttpResponse:
                 data = resp.json().get("data", {})
                 _store_session_tokens(request, data)
                 return redirect(reverse("ui:dashboard"))
-            error = _extract_error(resp)
+            err = _extract_error(resp)
+            error = err["friendly"]
+            error_detail = err["technical"]
         except requests.RequestException as exc:
-            error = str(exc)
+            error = "Impossible de contacter le service d'authentification."
+            error_detail = str(exc)
         return render(
             request,
             "login.html",
-            {"auth_base": AUTH_API_BASE_URL, "error": error},
+            {"auth_base": AUTH_API_BASE_URL, "error": error, "error_detail": error_detail},
             status=401,
         )
 
@@ -156,13 +170,16 @@ def register_view(request: HttpRequest) -> HttpResponse:
                 data = resp.json().get("data", {})
                 _store_session_tokens(request, data)
                 return redirect(reverse("ui:dashboard"))
-            error = _extract_error(resp)
+            err = _extract_error(resp)
+            error = err["friendly"]
+            error_detail = err["technical"]
         except requests.RequestException as exc:
-            error = str(exc)
+            error = "Impossible de contacter le service d'authentification."
+            error_detail = str(exc)
         return render(
             request,
             "register.html",
-            {"auth_base": AUTH_API_BASE_URL, "error": error},
+            {"auth_base": AUTH_API_BASE_URL, "error": error, "error_detail": error_detail},
             status=400,
         )
 
