@@ -1,0 +1,30 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        # Non-blocking: surfaces style issues without failing the gate.
+        run: npm run lint
+        continue-on-error: true
+      - name: Typecheck & production build
+        # `next build` runs the TypeScript compiler — this is the hard gate
+        # that catches type regressions before they reach Docker.
+        run: npm run build
+
+  # Playwright E2E runs against the full stack, which lives in the platform
+  # repo (smarthr360-platform). It is exercised there via docker compose; a
+  # cross-repo E2E job can be added once both repos share a workspace.
